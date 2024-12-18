@@ -19,3 +19,15 @@ cond activate venv/
 pip install -r requirements.txt
 ```
 
+
+```
+api = HRKU-a74e9b20-e554-4d80-bea8-ceb2e59cc29c
+```
+
+BUILD DOCKER IMAGE
+
+```
+docker build -t <image_name>: <tagname>.
+```
+
+>Note: Image_name should be in lower case
