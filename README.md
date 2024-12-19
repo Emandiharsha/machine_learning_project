@@ -31,3 +31,24 @@ docker build -t <image_name>: <tagname>.
 ```
 
 >Note: Image_name should be in lower case
+
+
+To list doker image
+```
+docker images
+```
+
+to run docker image
+```
+docker run -p 5000:5000 -e PORT=5000 c998cd131fa1
+```
+to check the running containers
+```
+docker ps
+```
+to stop image 
+```
+docker stop <container_id>
+
+docker stop c998cd131fa1
+```
