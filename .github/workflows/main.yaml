@@ -1,38 +1,46 @@
-# Workflow name
 name: Deploy to Heroku
 
-# Trigger the workflow on every push to the main branch
+# Trigger the workflow on push to the main branch
 on:
   push:
-    branches: [main]
+    branches:
+      - main
 
-# Workflow jobs
 jobs:
   deploy:
     runs-on: ubuntu-22.04
+
     steps:
-      # Step 1: Check out the repository
+      # Step 1: Checkout the code from the repository
       - name: Checkout Repository
         uses: actions/checkout@v2
 
       # Step 2: Log in to Heroku Container Registry
       - name: Log in to Heroku Container Registry
         run: |
-          echo ${{ secrets.HEROKU_API_KEY }} | docker login --username=_ --password-stdin registry.heroku.com
+          echo "${{ secrets.HEROKU_API_KEY }}" | docker login --username=_ --password-stdin registry.heroku.com
 
-      # Step 3: Build the Docker image
-      - name: Build the Docker image
+      # Step 3: Build the Docker image for Heroku
+      - name: Build Docker Image
         run: |
-          docker build --file ./Dockerfile --tag registry.heroku.com/${{ secrets.HEROKU_APP_NAME }}/web .
+          docker build -t registry.heroku.com/${{ secrets.HEROKU_APP_NAME }}/web .
 
-      # Step 4: Push the Docker image to Heroku
-      - name: Push the Docker image to Heroku
+      # Step 4: Push the Docker image to Heroku Container Registry
+      - name: Push Docker Image
         run: |
           docker push registry.heroku.com/${{ secrets.HEROKU_APP_NAME }}/web
 
-      # Step 5: Release the Docker container on Heroku
-      - name: Release the Docker container on Heroku
+      # Step 5: Log in to Heroku CLI (for Heroku commands)
+      - name: Log in to Heroku CLI
+        run: |
+          echo "${{ secrets.HEROKU_API_KEY }}" | heroku auth:token
+
+      # Step 6: Set the Heroku app to use Docker stack (needed for Docker deployments)
+      - name: Set Heroku Stack to Container
+        run: |
+          heroku stack:set container --app ${{ secrets.HEROKU_APP_NAME }}
+
+      # Step 7: Release the Docker container on Heroku
+      - name: Release Docker Image
         run: |
           heroku container:release web --app ${{ secrets.HEROKU_APP_NAME }}
-        env:
-          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
