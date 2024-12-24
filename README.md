@@ -21,7 +21,9 @@ pip install -r requirements.txt
 
 
 ```
-api = HRKU-a74e9b20-e554-4d80-bea8-ceb2e59cc29c
+heroku api = HRKU-a74e9b20-e554-4d80-bea8-ceb2e59cc29c
+heroku mail= harshavardhan.emandi.000@gmail.com
+heroku_app_name = harsha-ml-regression
 ```
 
 BUILD DOCKER IMAGE
@@ -33,7 +35,7 @@ docker build -t <image_name>: <tagname>.
 >Note: Image_name should be in lower case
 
 
-To list doker image
+To list docker image
 ```
 docker images
 ```
